@@ -1,16 +1,11 @@
-
 // next.config.ts
 import type { NextConfig } from 'next'
-import { NextResponse } from 'next/server'
 
-
-const nextConfig = {
+const nextConfig: NextConfig = {
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // 💥 This line disables build-breaking ESLint checks
   },
-  // ...other config
 }
 
 export default nextConfig
-
 
