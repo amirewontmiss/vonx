@@ -7,7 +7,7 @@ import Sidebar from '../components/Sidebar'
 export default function Home() {
   const [input, setInput] = useState('')
   const router = useRouter()
-
+  const text = `Don't` → `Don&apos;t` or just use double quotes around strings
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!input.trim()) return
