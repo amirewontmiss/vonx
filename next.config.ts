@@ -3,12 +3,14 @@
 import type { NextConfig } from 'next'
 import { NextResponse } from 'next/server'
 
-const nextConfig: NextConfig = {
-  reactStrictMode: true,
+
+const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // ✅ disables ESLint build errors on Vercel
+    ignoreDuringBuilds: true,
   },
+  // ...other config
 }
 
 export default nextConfig
+
 
