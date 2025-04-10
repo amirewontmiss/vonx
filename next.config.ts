@@ -1,10 +1,10 @@
-// next.config.ts
-import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   eslint: {
-    ignoreDuringBuilds: true, // 💥 This line disables build-breaking ESLint checks
+    ignoreDuringBuilds: true, // 💥 disables ESLint from crashing build
   },
+  reactStrictMode: true,
 }
 
 export default nextConfig
