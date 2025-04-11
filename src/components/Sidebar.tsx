@@ -9,23 +9,22 @@ const navItems = [
   { name: 'Research', href: '/research' },
   { name: 'API', href: '/api' },
   { name: 'About', href: '/about' },
-  { name: 'News', href: '/news' },
+  { name: 'News', href: '/news' }
 ]
 
 export default function Sidebar({
   open,
-  setOpen,
+  setOpen
 }: {
   open: boolean
-  setOpen: (value: boolean) => void
+  setOpen: (val: boolean) => void
 }) {
   const pathname = usePathname()
 
   return (
     <>
-      {/* Sidebar */}
-      <div className={`h-screen fixed top-0 left-0 transition-all duration-300 ease-in-out ${open ? 'w-60' : 'w-0 overflow-hidden'}`}>
-        <div className="h-full bg-black text-white p-6 border-r border-gray-800 relative">
+      <div className={`fixed top-0 left-0 h-screen bg-black text-white transition-all duration-300 ease-in-out ${open ? 'w-60' : 'w-0 overflow-hidden'}`}>
+        <div className="h-full p-6 border-r border-gray-800 relative">
           <button
             onClick={() => setOpen(false)}
             className="absolute top-4 right-4 text-gray-500 hover:text-white"
@@ -43,7 +42,9 @@ export default function Sidebar({
                 key={item.name}
                 href={item.href}
                 className={`text-lg font-medium transition-colors ${
-                  pathname === item.href ? 'text-white bg-[#1e1e1e] px-3 py-2 rounded' : 'text-gray-400 hover:text-white'
+                  pathname === item.href
+                    ? 'text-white bg-[#1e1e1e] px-3 py-2 rounded'
+                    : 'text-gray-400 hover:text-white'
                 }`}
               >
                 {item.name}
@@ -53,7 +54,6 @@ export default function Sidebar({
         </div>
       </div>
 
-      {/* Show sidebar again */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
