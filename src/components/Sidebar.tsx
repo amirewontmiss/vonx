@@ -2,7 +2,6 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 
 const navItems = [
@@ -13,16 +12,20 @@ const navItems = [
   { name: 'News', href: '/news' },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({
+  open,
+  setOpen,
+}: {
+  open: boolean
+  setOpen: (value: boolean) => void
+}) {
   const pathname = usePathname()
-  const [open, setOpen] = useState(true)
 
   return (
     <>
       {/* Sidebar */}
       <div className={`h-screen fixed top-0 left-0 transition-all duration-300 ease-in-out ${open ? 'w-60' : 'w-0 overflow-hidden'}`}>
         <div className="h-full bg-black text-white p-6 border-r border-gray-800 relative">
-          {/* Toggle button */}
           <button
             onClick={() => setOpen(false)}
             className="absolute top-4 right-4 text-gray-500 hover:text-white"
