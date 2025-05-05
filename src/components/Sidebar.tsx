@@ -7,6 +7,7 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 const navItems = [
   { name: 'VonX', href: '/' },
   { name: 'Research', href: '/research' },
+  { name: 'Sandbox', href: '/sandbox' },
   { name: 'API', href: '/api' },
   { name: 'About', href: '/about' },
   { name: 'News', href: '/news' }
