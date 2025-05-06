@@ -2,15 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List
-import torch
-import torch.nn as nn
-import pennylane as qml
-import numpy as np
-import random
+import torch, torch.nn as nn, pennylane as qml, numpy as np
 
-# === FASTAPI SETUP ===
+# ─────────────────────────── FastAPI boilerplate ──────────────────────────
 app = FastAPI()
-
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -18,98 +13,97 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === QUANTUM DEVICE ===
-dev = qml.device("default.qubit", wires=2)
-
-# === QNODE: Quantum circuit returning a scalar value ===
-@qml.qnode(dev, interface="torch")
-def qnn_circuit(inputs, weights):
-    qml.AngleEmbedding(inputs, wires=[0, 1])
-    for i in range(2):
-        qml.RX(weights[i], wires=i)
-    return qml.expval(qml.PauliZ(0))  # return a single value
-
-# === HYBRID QNN MODEL ===
-class HybridQNN(nn.Module):
-    def __init__(self):
-        super().__init__()
-        self.weights = nn.Parameter(torch.rand(2))  # 2 trainable angles
-
-    def forward(self, x):
-        # Vectorized mapping of quantum circuit to each input in batch
-        return torch.vmap(qnn_circuit, in_dims=(0, None))(x, self.weights)  # shape: [batch_size]
-
-# === API MODELS ===
+# ───────────────────────────── Pydantic models ────────────────────────────
 class Point(BaseModel):
     x: float
     y: float
     label: int
 
-class TrainRequest(BaseModel):
+class TrainReq(BaseModel):
     dataset: List[Point]
-    layers: List[str]
+    layers: List[str]         # reserved for future circuit-builder
     learningRate: float
     epochs: int = 25
 
-class TrainResponse(BaseModel):
-    loss: List[float]
-    accuracy: List[float]
-    decisionMap: List[List[int]]
+class TrainResp(BaseModel):
+    losses: List[float]
+    accuracies: List[float]
+    finalLoss: float
+    finalAcc: float
+    decisionMap: List[List[float]]
 
-# === TRAINING LOGIC ===
-def train_model(dataset, layers, learning_rate, epochs):
-    # Prepare data
-    X = np.array([[p.x, p.y] for p in dataset], dtype=np.float32)
-    Y = np.array([p.label for p in dataset], dtype=np.float32)
+# ─────────────────────────── PennyLane circuit ────────────────────────────
+dev = qml.device("default.qubit", wires=2)
 
-    x_train = torch.tensor(X)
-    y_train = torch.tensor(Y)
+@qml.qnode(dev, interface="torch")
+def qnode(x, w):
+    qml.AngleEmbedding(x, wires=[0,1])
+    for i in range(3):               # 3 repetitions
+        qml.RY(w[2*i],   wires=0)
+        qml.RY(w[2*i+1], wires=1)
+        qml.CNOT(wires=[0,1])
+        qml.CNOT(wires=[1,0])
+    return qml.expval(qml.PauliZ(1))
 
-    # Model
-    model = HybridQNN()
-    optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+class HybridQNN(nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.w = nn.Parameter(torch.randn(6))   # 3 layers × 2 params
+
+
+    def forward(self, x):
+        # vectorised evaluation over a batch
+        return torch.vmap(qnode, in_dims=(0, None))(x, self.w)
+
+# ─────────────────────────── Helper functions ─────────────────────────────
+def train(dataset, lr, epochs):
+    X = torch.tensor([[p.x, p.y] for p in dataset], dtype=torch.float32)
+    Y = torch.tensor([p.label for p in dataset],   dtype=torch.float32)
+
+    net = HybridQNN()
+    opt = torch.optim.Adam(net.parameters(), lr=lr)
     loss_fn = nn.BCEWithLogitsLoss()
 
-    losses = []
-    accuracies = []
-
+    losses, accs = [], []
     for _ in range(epochs):
-        model.train()
-        optimizer.zero_grad()
-
-        outputs = model(x_train)  # shape: [batch_size]
-        loss = loss_fn(outputs, y_train)
-
+        opt.zero_grad()
+        logits = net(X)
+        loss   = loss_fn(logits, Y)
         loss.backward()
-        optimizer.step()
-
-        preds = (torch.sigmoid(outputs) > 0.5).float()
-        acc = (preds == y_train).float().mean().item()
+        opt.step()
 
         losses.append(loss.item())
-        accuracies.append(acc)
+        accs.append(((torch.sigmoid(logits) > 0.5) == Y).float().mean().item())
 
-    # Simulated decision boundary (replace with real heatmap later)
-    decision_map = [[random.randint(0, 1) for _ in range(50)] for _ in range(50)]
+    return net, losses, accs
 
-    return losses, accuracies, decision_map
+def decision_grid(model, res=120):
+    """Return a (res × res) grid of class-probabilities."""
+    res = max(20, res)        # keep sane resolution
+    xs  = np.linspace(-1, 1, res)
+    ys  = np.linspace(-1, 1, res)
+    mesh = torch.tensor(np.dstack(np.meshgrid(xs, ys)).reshape(-1, 2),
+                        dtype=torch.float32)
+    with torch.no_grad():
+        probs = torch.sigmoid(model(mesh)).view(res, res).cpu().numpy()
+    return probs.tolist()
 
-# === ROUTES ===
+# ───────────────────────────── API routes ─────────────────────────────────
 @app.get("/")
-def root():
-    return {"message": "VonX QNN Backend is running."}
+def ping():
+    return {"msg": "VonX QNN backend alive"}
 
-@app.post("/train", response_model=TrainResponse)
-def train_qnn(payload: TrainRequest):
-    losses, accuracies, decision_map = train_model(
-        payload.dataset,
-        payload.layers,
-        payload.learningRate,
-        payload.epochs
-    )
-    return TrainResponse(
-        loss=losses,
-        accuracy=accuracies,
-        decisionMap=decision_map
-    )
+@app.post("/train", response_model=TrainResp)
+def train_qnn(req: TrainReq):
+    # layers param is accepted for future circuit customisation
+    net, losses, accs = train(req.dataset, req.learningRate, req.epochs)
+    grid              = decision_grid(net, 120)
+
+    return {
+        "losses":      losses,
+        "accuracies":  accs,
+        "finalLoss":   losses[-1],
+        "finalAcc":    accs[-1],
+        "decisionMap": grid,
+    }
 
