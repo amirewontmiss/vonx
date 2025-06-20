@@ -16,9 +16,9 @@ export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center text-white px-4 min-h-screen">
       <div className="text-center mb-6">
-        <h1 className="text-4xl font-extrabold text-white mb-2">Quantum GPT-mini 🚀</h1>
+        <h1 className="text-4xl font-extrabold text-white mb-2">Quantum GPT-mini</h1>
         <p className="text-gray-400 text-lg">
-          World's first ever experimental Quantum Transformer AI
+          World&apos;s first ever experimental Quantum Transformer AI
         </p>
       </div>
       <form onSubmit={handleSubmit} className="w-full max-w-3xl">

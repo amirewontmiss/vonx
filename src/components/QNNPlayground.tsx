@@ -47,7 +47,7 @@ export default function QNNPlayground() {
       const d = await res.json()
       setLosses(d.losses ?? []); setGrid(d.decisionMap ?? null)
       setFinalLoss(d.finalLoss ?? null); setFinalAcc(d.finalAcc ?? null)
-      setStatus('Done ✅')
+      setStatus('Done')
     }catch(e){ console.error(e); setStatus('Network error') }
   }
 
@@ -59,7 +59,7 @@ export default function QNNPlayground() {
       <aside className="w-[260px] shrink-0 space-y-6 bg-zinc-900 border-r border-zinc-800 p-5">
         {/* dataset */}
         <section>
-          <h3 className="font-semibold text-sm mb-1">🧬 Dataset</h3>
+          <h3 className="font-semibold text-sm mb-1">Dataset</h3>
           <select value={dataset} onChange={e=>setDataset(e.target.value)}
                   className="w-full p-2 rounded bg-zinc-800 text-sm">
             {DATASETS.map(d=> <option key={d}>{d}</option>)}
@@ -68,7 +68,7 @@ export default function QNNPlayground() {
 
         {/* learning rate */}
         <section>
-          <h3 className="font-semibold text-sm mb-1">⚙️ Learning Rate</h3>
+          <h3 className="font-semibold text-sm mb-1">Learning Rate</h3>
           <select value={lr} onChange={e=>setLr(parseFloat(e.target.value))}
                   className="w-full p-2 rounded bg-zinc-800 text-sm">
             {LEARN_RATES.map(v=> <option key={v} value={v}>{v}</option>)}
@@ -77,7 +77,7 @@ export default function QNNPlayground() {
 
         {/* epochs */}
         <section>
-          <h3 className="font-semibold text-sm mb-1">🔁 Epochs</h3>
+          <h3 className="font-semibold text-sm mb-1">Epochs</h3>
           <input type="number" min={5} max={500} step={5}
                  value={epochs} onChange={e=>setEpochs(parseInt(e.target.value))}
                  className="w-full p-2 rounded bg-zinc-800 text-sm text-center"/>
@@ -85,7 +85,7 @@ export default function QNNPlayground() {
 
         {/* blocks */}
         <section>
-          <h3 className="font-semibold text-sm mb-1">📐 Layer Blocks</h3>
+          <h3 className="font-semibold text-sm mb-1">Layer Blocks</h3>
           {LAYERS.map(l=>(
             <button key={l} onClick={()=>addLayer(l)}
                     className="w-full mb-1 p-2 bg-zinc-800 hover:bg-zinc-700 rounded text-sm">
@@ -96,7 +96,7 @@ export default function QNNPlayground() {
 
         <button onClick={reset}
                 className="w-full p-2 bg-red-600 hover:bg-red-700 rounded font-semibold text-sm">
-          ❌ Reset
+          Reset
         </button>
       </aside>
 
@@ -114,7 +114,7 @@ export default function QNNPlayground() {
             {losses.length>0 && <LiveLossChart loss={losses}/>}
 
             <section className="p-4 bg-zinc-900 border border-zinc-800 rounded-2xl shadow text-sm space-y-1">
-              <h3 className="font-semibold mb-1">📊 Training Stats</h3>
+              <h3 className="font-semibold mb-1">Training Stats</h3>
               <div>Final Loss: <span className="text-green-400">{finalLoss?.toFixed(4)??'--'}</span></div>
               <div>Final Accuracy: <span className="text-green-400">{finalAcc?.toFixed(3)??'--'}</span></div>
               <div>Status: <span className="text-yellow-400">{status}</span></div>
@@ -122,7 +122,7 @@ export default function QNNPlayground() {
 
             <motion.button whileTap={{scale:.95}} onClick={startTraining}
               className="py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 shadow font-semibold text-sm">
-              🚀 Start Training
+              Start Training
             </motion.button>
           </div>
 

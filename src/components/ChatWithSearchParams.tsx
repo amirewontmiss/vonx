@@ -35,8 +35,8 @@ export default function ChatWithSearchParams() {
       })
       const data = await res.json()
       setMessages((prev) => [...prev, { from: 'bot', text: data.response }])
-    } catch (err) {
-      setMessages((prev) => [...prev, { from: 'bot', text: '⚠️ Error contacting API.' }])
+    } catch {
+      setMessages((prev) => [...prev, { from: 'bot', text: 'Error contacting API.' }])
     } finally {
       setLoading(false)
     }
