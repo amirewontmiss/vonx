@@ -15,6 +15,23 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center text-white px-4 min-h-screen">
+      <div className="text-center mb-10">
+        <h1 className="text-3xl font-bold mb-2">
+          We are building EigenOS: The OS kernel for Quantum Systems
+        </h1>
+        <p className="text-gray-400 mb-4">
+          We’re building the runtime, compiler, and orchestration stack for
+          quantum-classical workloads that&apos;s starting with HaulVisor, our Quantum Circuit Orchestration Interface
+        </p>
+        <a
+          href="https://haulvisor.vercel.app/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg"
+        >
+          Open HaulVisor
+        </a>
+      </div>
       <div className="text-center mb-6">
         <h1 className="text-4xl font-extrabold text-white mb-2">Quantum GPT-mini</h1>
         <p className="text-gray-400 text-lg">
