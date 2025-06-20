@@ -6,7 +6,7 @@ export default function LiveLossChart({ loss }: { loss: number[] }) {
 
   return (
     <div className="w-full h-64 p-4 bg-zinc-900 rounded-xl border border-zinc-700 shadow">
-      <h2 className="text-white text-sm font-semibold mb-2">📉 Loss Over Epochs</h2>
+      <h2 className="text-white text-sm font-semibold mb-2">Loss Over Epochs</h2>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#444" />
