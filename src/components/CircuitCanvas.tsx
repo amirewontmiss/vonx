@@ -30,7 +30,7 @@ export default function CircuitCanvas(){
 function DropCell({column,wire}:{column:number;wire:number}){
   const {isOver,setNodeRef}=useDroppable({id:`cell-${column}-${wire}`, data:{column,wire}})
   return (
-    <rect ref={setNodeRef}
+    <rect ref={(el)=>setNodeRef(el as unknown as HTMLElement)}
           x={column*80} y={wire*60} width="60" height="60"
           fill={isOver?'rgba(0,123,255,0.35)':'transparent'}/>
   )
