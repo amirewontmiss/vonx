@@ -1,23 +1,23 @@
 'use client'
 
-import { useState, useRef, useEffect, FC, FormEvent } from 'react'
+import { useState, useRef, useEffect, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import { motion } from 'framer-motion' // For smooth animations
+import { motion } from 'framer-motion'
 
-// A simple, typed functional component for the background effect.
-const BackgroundParticles: FC = () => {
+// A simple functional component for the background effect.
+// The ': FC' type has been removed to let TypeScript infer it, avoiding potential namespace issues.
+const BackgroundParticles = () => {
   return (
     <div className="absolute inset-0 z-0 overflow-hidden opacity-10">
       {/* Example: Simple geometric pattern with CSS */}
       <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
       <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-      {/* For more complex particles, you'd integrate a library like react-tsparticles */}
     </div>
   )
 }
 
-// The main Home component, typed to return a JSX.Element.
-export default function Home(): JSX.Element {
+// The main Home component. The explicit ': JSX.Element' return type has been removed for better compatibility.
+export default function Home() {
   const [input, setInput] = useState<string>('')
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
@@ -103,7 +103,6 @@ export default function Home(): JSX.Element {
               </svg>
             </motion.a>
             <motion.a
-              // ----- THIS LINE HAS BEEN UPDATED -----
               href="mailto:amireramazan0809@gmail.com?subject=EigenOS%20Demo%20Request&body=I'm%20interested%20in%20a%20demo%20of%20EigenOS.%20Please%20provide%20me%20with%20more%20information."
               className="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"
               whileHover={{ scale: 1.05 }}
