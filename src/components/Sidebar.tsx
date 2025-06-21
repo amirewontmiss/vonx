@@ -10,7 +10,7 @@ const navItems = [
   { name: 'Sandbox', href: '/sandbox' },
   { name: 'API', href: '/api' },
   { name: 'About', href: '/about' },
-  { name: 'News', href: '/news' }
+  { name: 'Contact', href: '/contact' }
 ]
 
 export default function Sidebar({
