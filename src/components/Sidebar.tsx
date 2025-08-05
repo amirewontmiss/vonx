@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 import { FiChevronLeft, FiChevronRight, FiActivity, FiDatabase, FiSettings, FiUser, FiZap, FiTerminal } from 'react-icons/fi'
 
 const navItems = [
-  { name: 'Command Center', href: '/', icon: FiTerminal },
+  { name: 'Main', href: '/', icon: FiTerminal },
   { name: 'Research', href: '/research', icon: FiActivity },
   { name: 'Sandbox', href: '/sandbox', icon: FiZap },
   { name: 'API', href: '/api', icon: FiDatabase },
@@ -38,9 +38,6 @@ export default function Sidebar({
             <h1 className="text-2xl font-bold text-white mb-1 tracking-tight">
               <span className="text-white">Von</span><span className="text-blue-400">X</span>
             </h1>
-            <p className="text-xs font-mono text-gray-500 uppercase tracking-wider">
-              Control Interface
-            </p>
           </div>
 
           {/* Navigation */}
@@ -62,21 +59,6 @@ export default function Sidebar({
             })}
           </nav>
 
-          {/* System Status */}
-          <div className="absolute bottom-6 left-6 right-6">
-            <div className="p-3 rounded-lg bg-gray-900/50 border border-gray-700/50">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-mono text-gray-400">STATUS</span>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                  <span className="text-xs font-mono text-green-400">ONLINE</span>
-                </div>
-              </div>
-              <div className="text-xs font-mono text-gray-500">
-                NEURAL.NET.ACTIVE
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

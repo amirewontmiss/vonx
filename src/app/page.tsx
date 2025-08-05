@@ -12,10 +12,10 @@ const GridBackground = () => {
 const QuantumParticles = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {[...Array(12)].map((_, i) => (
+      {[...Array(8)].map((_, i) => (
         <motion.div
           key={i}
-          className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60"
+          className="absolute w-1 h-1 bg-blue-400/40 rounded-full"
           initial={{
             x: `${Math.random() * 100}vw`,
             y: `${Math.random() * 100}vh`,
@@ -23,11 +23,12 @@ const QuantumParticles = () => {
           animate={{
             x: `${Math.random() * 100}vw`,
             y: `${Math.random() * 100}vh`,
+            opacity: [0.2, 0.6, 0.2],
           }}
           transition={{
-            duration: Math.random() * 20 + 10,
+            duration: Math.random() * 25 + 15,
             repeat: Infinity,
-            ease: "linear"
+            ease: "easeInOut"
           }}
         />
       ))}
@@ -81,51 +82,46 @@ Please respond to arrange a demo session.`
       <QuantumParticles />
       
       {/* Main content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: 'easeOut' }}
-          className="text-center max-w-4xl w-full"
-        >
-          {/* Main Title */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-12">
+        <div className="w-full max-w-5xl mx-auto">
+          {/* Main Title Section */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3, duration: 0.8 }}
-            className="mb-16"
+            className="text-center mb-12"
           >
-            <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tight">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
               Eigen
             </h1>
-            <div className="text-xl md:text-2xl text-blue-400 font-light tracking-wider">
+            <div className="text-lg md:text-xl lg:text-2xl text-blue-400 font-light tracking-wider mb-8">
               Quantum Computing Platform
             </div>
+            
+            {/* Subtitle */}
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="text-gray-400 text-base md:text-lg max-w-3xl mx-auto leading-relaxed"
+            >
+              Experience the future of computation. Request access to our quantum platform 
+              and discover what&apos;s possible when classical meets quantum.
+            </motion.p>
           </motion.div>
-
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="text-gray-400 text-lg mb-16 max-w-2xl mx-auto leading-relaxed"
-          >
-            Experience the future of computation. Request access to our quantum platform 
-            and discover what&apos;s possible when classical meets quantum.
-          </motion.p>
 
           {/* Demo Request Form */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9, duration: 0.8 }}
-            className="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl mx-auto"
+            className="glass-effect rounded-2xl p-6 md:p-8 lg:p-10 max-w-3xl mx-auto"
           >
             {!submitted ? (
               <>
-                <h2 className="text-2xl font-semibold text-white mb-8">Request Demo Access</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                <h2 className="text-xl md:text-2xl font-semibold text-white mb-6 text-center">Request Demo Access</h2>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                  <div className="grid md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-sm font-medium text-gray-300 mb-2">
                         Full Name *
@@ -176,7 +172,7 @@ Please respond to arrange a demo session.`
                     </label>
                     <textarea
                       name="useCase"
-                      rows={4}
+                      rows={3}
                       value={formData.useCase}
                       onChange={handleInputChange}
                       className="input-primary w-full resize-none"
@@ -184,19 +180,21 @@ Please respond to arrange a demo session.`
                     />
                   </div>
 
-                  <motion.button
-                    type="submit"
-                    disabled={isSubmitting || !formData.name || !formData.email}
-                    className="btn-primary w-full py-4 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    {isSubmitting ? 'Opening Email Client...' : 'Request Demo Access'}
-                  </motion.button>
+                  <div className="pt-2">
+                    <motion.button
+                      type="submit"
+                      disabled={isSubmitting || !formData.name || !formData.email}
+                      className="btn-primary w-full py-3 md:py-4 text-base md:text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                    >
+                      {isSubmitting ? 'Opening Email Client...' : 'Request Demo Access'}
+                    </motion.button>
+                  </div>
                 </form>
               </>
             ) : (
-              <div className="text-center py-8">
+              <div className="text-center py-6">
                 <motion.div
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
@@ -208,10 +206,10 @@ Please respond to arrange a demo session.`
                   </svg>
                 </motion.div>
                 <h3 className="text-xl font-semibold text-white mb-4">Request Sent!</h3>
-                <p className="text-gray-400 mb-6">
+                <p className="text-gray-400 mb-6 leading-relaxed">
                   Your email client should have opened with a pre-filled message. 
                   If not, please send an email to{' '}
-                  <a href="mailto:realxanamire@gmail.com" className="text-blue-400 hover:text-blue-300">
+                  <a href="mailto:realxanamire@gmail.com" className="text-blue-400 hover:text-blue-300 transition-colors">
                     realxanamire@gmail.com
                   </a>
                 </p>
@@ -224,20 +222,7 @@ Please respond to arrange a demo session.`
               </div>
             )}
           </motion.div>
-
-          {/* Footer */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2, duration: 0.8 }}
-            className="mt-16 text-center"
-          >
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-500 font-mono">
-              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-              <span>QUANTUM SYSTEMS OPERATIONAL</span>
-            </div>
-          </motion.div>
-        </motion.div>
+        </div>
       </div>
     </div>
   )

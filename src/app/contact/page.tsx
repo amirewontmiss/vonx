@@ -1,15 +1,12 @@
 'use client'
+
 export default function ContactPage() {
   return (
-    <div className="flex bg-black text-white h-screen">
-      <main className="flex-1 overflow-y-auto p-10 space-y-16">
-        <section className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
-          <p className="text-gray-300 text-lg">
-            Email the founder: <a className="underline" href="mailto:realxanamire@gmail.com">realxanamire@gmail.com</a>
-          </p>
-        </section>
-      </main>
+    <div className="flex flex-col h-screen bg-black text-white items-center justify-center">
+      <div className="text-center">
+        <div className="w-16 h-16 border-2 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-400 text-lg">Coming Soon</p>
+      </div>
     </div>
   )
 }
