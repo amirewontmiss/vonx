@@ -69,7 +69,7 @@ function reducer(state: CircuitState, action: Action): CircuitState {
 const CircuitContext = createContext<{
   state: CircuitState
   dispatch: React.Dispatch<Action>
-}>({} as any)
+} | undefined>(undefined)
 
 export const CircuitProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(reducer, {
@@ -85,5 +85,11 @@ export const CircuitProvider = ({ children }: { children: ReactNode }) => {
 }
 
 /** Hook to access circuit state & dispatch actions */
-export const useCircuit = () => useContext(CircuitContext)
+export const useCircuit = () => {
+  const context = useContext(CircuitContext)
+  if (!context) {
+    throw new Error('useCircuit must be used within a CircuitProvider')
+  }
+  return context
+}
 

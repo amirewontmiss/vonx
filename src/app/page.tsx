@@ -1,176 +1,244 @@
 'use client'
 
-import { useState, useRef, useEffect, FormEvent } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, FormEvent } from 'react'
 import { motion } from 'framer-motion'
 
-// A simple functional component for the background effect.
-// The ': FC' type has been removed to let TypeScript infer it, avoiding potential namespace issues.
-const BackgroundParticles = () => {
+const GridBackground = () => {
   return (
-    <div className="absolute inset-0 z-0 overflow-hidden opacity-10">
-      {/* Example: Simple geometric pattern with CSS */}
-      <div className="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
-      <div className="absolute bottom-0 right-0 w-full h-full bg-[radial-gradient(ellipse_80%_80%_at_50%_120%,rgba(120,119,198,0.3),rgba(255,255,255,0))]"></div>
+    <div className="absolute inset-0 pattern-grid opacity-20" />
+  )
+}
+
+const QuantumParticles = () => {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      {[...Array(12)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute w-1 h-1 bg-blue-400 rounded-full opacity-60"
+          initial={{
+            x: `${Math.random() * 100}vw`,
+            y: `${Math.random() * 100}vh`,
+          }}
+          animate={{
+            x: `${Math.random() * 100}vw`,
+            y: `${Math.random() * 100}vh`,
+          }}
+          transition={{
+            duration: Math.random() * 20 + 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+      ))}
     </div>
   )
 }
 
-// The main Home component. The explicit ': JSX.Element' return type has been removed for better compatibility.
 export default function Home() {
-  const [input, setInput] = useState<string>('')
-  const router = useRouter()
-  const inputRef = useRef<HTMLInputElement>(null)
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    useCase: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
-  useEffect(() => {
-    // Focus the input field when the component mounts
-    if (inputRef.current) {
-      inputRef.current.focus()
-    }
-  }, [])
-
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!input.trim()) return
-    router.push(`/chat?prompt=${encodeURIComponent(input)}`)
+    setIsSubmitting(true)
+
+    // Create email body
+    const emailBody = `Demo Request from ${formData.name}
+
+Company: ${formData.company}
+Email: ${formData.email}
+Use Case: ${formData.useCase}
+
+Please respond to arrange a demo session.`
+
+    // Create mailto link
+    const mailtoLink = `mailto:realxanamire@gmail.com?subject=Eigen Demo Request - ${formData.name}&body=${encodeURIComponent(emailBody)}`
+    
+    // Open email client
+    window.location.href = mailtoLink
+    
+    setIsSubmitting(false)
+    setSubmitted(true)
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center text-white px-4 min-h-screen bg-gradient-to-br from-gray-950 to-black overflow-hidden font-sans">
-      <BackgroundParticles />
-
-      {/* Main content container */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="relative z-10 flex flex-col items-center justify-center text-center max-w-4xl w-full"
-      >
-        {/* VonX Corporate Logo/Name */}
+    <div className="relative min-h-screen overflow-hidden">
+      <GridBackground />
+      <QuantumParticles />
+      
+      {/* Main content */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6">
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0, ease: 'easeOut' }}
-          className="mb-12 md:mb-16"
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className="text-center max-w-4xl w-full"
         >
-          <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter drop-shadow-lg select-none">
-            VonX
-          </h1>
-          <p className="text-gray-400 text-lg md:text-xl font-medium mt-2 tracking-wide uppercase">
-            Deep Tech Solutions
-          </p>
+          {/* Main Title */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="mb-16"
+          >
+            <h1 className="text-6xl md:text-8xl font-bold text-white mb-6 tracking-tight">
+              Eigen
+            </h1>
+            <div className="text-xl md:text-2xl text-blue-400 font-light tracking-wider">
+              Quantum Computing Platform
+            </div>
+          </motion.div>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="text-gray-400 text-lg mb-16 max-w-2xl mx-auto leading-relaxed"
+          >
+            Experience the future of computation. Request access to our quantum platform 
+            and discover what&apos;s possible when classical meets quantum.
+          </motion.p>
+
+          {/* Demo Request Form */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9, duration: 0.8 }}
+            className="glass-effect rounded-3xl p-8 md:p-12 max-w-2xl mx-auto"
+          >
+            {!submitted ? (
+              <>
+                <h2 className="text-2xl font-semibold text-white mb-8">Request Demo Access</h2>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Full Name *
+                      </label>
+                      <input
+                        type="text"
+                        name="name"
+                        required
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="input-primary w-full"
+                        placeholder="John Doe"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">
+                        Email Address *
+                      </label>
+                      <input
+                        type="email"
+                        name="email"
+                        required
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="input-primary w-full"
+                        placeholder="john@company.com"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Company/Organization
+                    </label>
+                    <input
+                      type="text"
+                      name="company"
+                      value={formData.company}
+                      onChange={handleInputChange}
+                      className="input-primary w-full"
+                      placeholder="Acme Corp"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Intended Use Case
+                    </label>
+                    <textarea
+                      name="useCase"
+                      rows={4}
+                      value={formData.useCase}
+                      onChange={handleInputChange}
+                      className="input-primary w-full resize-none"
+                      placeholder="Describe how you plan to use Eigen..."
+                    />
+                  </div>
+
+                  <motion.button
+                    type="submit"
+                    disabled={isSubmitting || !formData.name || !formData.email}
+                    className="btn-primary w-full py-4 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {isSubmitting ? 'Opening Email Client...' : 'Request Demo Access'}
+                  </motion.button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center py-8">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", duration: 0.6 }}
+                  className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6"
+                >
+                  <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </motion.div>
+                <h3 className="text-xl font-semibold text-white mb-4">Request Sent!</h3>
+                <p className="text-gray-400 mb-6">
+                  Your email client should have opened with a pre-filled message. 
+                  If not, please send an email to{' '}
+                  <a href="mailto:realxanamire@gmail.com" className="text-blue-400 hover:text-blue-300">
+                    realxanamire@gmail.com
+                  </a>
+                </p>
+                <button
+                  onClick={() => {setSubmitted(false); setFormData({name:'', email:'', company:'', useCase:''})}}
+                  className="btn-secondary"
+                >
+                  Submit Another Request
+                </button>
+              </div>
+            )}
+          </motion.div>
+
+          {/* Footer */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.8 }}
+            className="mt-16 text-center"
+          >
+            <div className="flex items-center justify-center gap-2 text-sm text-gray-500 font-mono">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+              <span>QUANTUM SYSTEMS OPERATIONAL</span>
+            </div>
+          </motion.div>
         </motion.div>
-
-        {/* EigenOS Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
-          className="mb-16 md:mb-24 px-4 py-8 w-full bg-gradient-to-br from-gray-800/20 to-gray-900/10 backdrop-blur-sm rounded-3xl shadow-xl border border-gray-700/50"
-        >
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 leading-tight tracking-tighter text-white drop-shadow-md">
-            EigenOS: The OS Kernel for Quantum Systems
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto opacity-85">
-            We’re building the runtime, compiler, and orchestration stack for
-            <br className="hidden md:inline" />
-            **quantum-classical workloads**, starting with{' '}
-            <strong className="text-blue-400">HaulVisor</strong>, our Quantum Circuit Orchestration Interface.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <motion.a
-              href="https://haulvisor.vercel.app/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center bg-blue-700 hover:bg-blue-600 active:bg-blue-800 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Open HaulVisor
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="ml-2 w-5 h-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0l-7 7"
-                />
-              </svg>
-            </motion.a>
-            <motion.a
-              href="mailto:amireramazan0809@gmail.com?subject=EigenOS%20Demo%20Request&body=I'm%20interested%20in%20a%20demo%20of%20EigenOS.%20Please%20provide%20me%20with%20more%20information."
-              className="inline-flex items-center justify-center bg-gray-600 hover:bg-gray-500 active:bg-gray-700 text-white font-semibold px-8 py-3 rounded-full transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              Book a Demo
-            </motion.a>
-          </div>
-        </motion.div>
-
-        {/* Separator / Visual break */}
-        <div className="w-2/3 h-px bg-gradient-to-r from-transparent via-gray-600 to-transparent my-10 md:my-16" />
-
-        {/* Quantum GPT-mini Section */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
-          className="mb-10 md:mb-16"
-        >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white mb-3 tracking-tighter drop-shadow-lg">
-            Quantum GPT<span className="text-blue-500">-mini</span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-400 opacity-90 italic">
-            World's first ever experimental <strong className="text-purple-300">Quantum Transformer AI</strong>
-          </p>
-        </motion.div>
-
-        {/* Input Form */}
-        <motion.form
-          onSubmit={handleSubmit}
-          className="w-full max-w-3xl px-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
-        >
-          <div className="flex items-center bg-gray-800 border border-gray-700/70 rounded-3xl px-5 py-4 w-full shadow-2xl focus-within:ring-2 focus-within:ring-blue-500 focus-within:ring-opacity-75 transition-all duration-300 ease-in-out">
-            <input
-              ref={inputRef}
-              type="text"
-              placeholder="Text..."
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              className="bg-transparent text-white w-full focus:outline-none text-lg md:text-xl placeholder-gray-500 pr-4"
-            />
-            <button
-              type="submit"
-              className="p-2 ml-2 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 rounded-full transition-all duration-300 ease-in-out transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-              aria-label="Send query"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-6 h-6 text-white"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13 7l5 5m0 0l-5 5m5-5H6"
-                />
-              </svg>
-            </button>
-          </div>
-        </motion.form>
-      </motion.div>
+      </div>
     </div>
   )
 }

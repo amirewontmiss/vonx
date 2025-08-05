@@ -3,8 +3,15 @@ export default function NewsPage() {
   return (
     <div className="flex bg-black text-white h-screen">
 
+      <div className="flex-1 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-2 border-gray-600 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-400 text-lg">Coming Soon</p>
+        </div>
+      </div>
+      
+      {/* HIDDEN CONTENT - PRESERVED FOR FUTURE USE
       <main className="flex-1 overflow-y-auto p-10 space-y-16">
-        {/* Section 1: Header */}
         <section className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4">Latest News</h1>
           <p className="text-gray-300 text-lg">
@@ -12,9 +19,7 @@ export default function NewsPage() {
           </p>
         </section>
 
-        {/* Section 2: Timeline Feed */}
         <section className="max-w-4xl mx-auto space-y-8">
-          {/* Item 1 */}
           <div className="border-l-2 border-blue-500 pl-6 relative">
             <div className="absolute w-3 h-3 bg-blue-500 rounded-full left-[-7px] top-1.5"></div>
             <h3 className="text-xl font-semibold mb-1">VonX v1.0 Launched (UI + API)</h3>
@@ -24,7 +29,6 @@ export default function NewsPage() {
             <p className="text-xs text-gray-600 mt-1">April 10, 2025</p>
           </div>
 
-          {/* Item 2 */}
           <div className="border-l-2 border-blue-500 pl-6 relative">
             <div className="absolute w-3 h-3 bg-blue-500 rounded-full left-[-7px] top-1.5"></div>
             <h3 className="text-xl font-semibold mb-1">Quantum Transformer Paper Planned</h3>
@@ -34,7 +38,6 @@ export default function NewsPage() {
             <p className="text-xs text-gray-600 mt-1">April 9, 2025</p>
           </div>
 
-          {/* Item 3 */}
           <div className="border-l-2 border-blue-500 pl-6 relative">
             <div className="absolute w-3 h-3 bg-blue-500 rounded-full left-[-7px] top-1.5"></div>
             <h3 className="text-xl font-semibold mb-1">Next Features</h3>
@@ -48,6 +51,7 @@ export default function NewsPage() {
           </div>
         </section>
       </main>
+      */}
     </div>
   )
 }

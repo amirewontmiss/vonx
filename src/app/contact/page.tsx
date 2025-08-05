@@ -6,7 +6,7 @@ export default function ContactPage() {
         <section className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4">Contact Us</h1>
           <p className="text-gray-300 text-lg">
-            Email the founder: <a className="underline" href="mailto:amireramazan0809@gmai.com">amireramazan0809@gmai.com</a>
+            Email the founder: <a className="underline" href="mailto:realxanamire@gmail.com">realxanamire@gmail.com</a>
           </p>
         </section>
       </main>
