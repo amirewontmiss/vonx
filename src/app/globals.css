@@ -182,31 +182,6 @@ body {
   }
 }
 
-.nav-link {
-  @apply relative text-gray-400 hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg;
-}
-
-.nav-link.active {
-  @apply text-white bg-gray-800;
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
-}
-
-.nav-link:hover::after,
-.nav-link.active::after {
-  width: 80%;
-}
 
 .data-table {
   @apply w-full bg-gray-900 rounded-lg overflow-hidden;

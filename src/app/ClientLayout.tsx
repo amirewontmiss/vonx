@@ -11,7 +11,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
       <Sidebar open={open} setOpen={setOpen} />
       <main
         className={`transition-all duration-300 flex-1 ${
-          open ? 'ml-64' : 'ml-0'
+          open ? 'ml-72' : 'ml-0'
         } min-h-screen`}
       >
         {children}
